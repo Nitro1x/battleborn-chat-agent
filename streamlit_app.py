@@ -44,13 +44,15 @@ def initialize_agent():
     )
 
     try:
-        return genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
-            system_instruction=system_instruction,
-            tools=[submit_service_request]
-        )
-    except Exception:
-        return None
+     model = genai.GenerativeModel(
+        model_name="gemini-1.5-flash" 
+        system_instruction=system_instruction,
+        tools=[submit_service_request]
+    )
+    except Exception as e:
+     st.error(f"❌ Initialization Failed: {e}")
+    ) except Exception:
+    return None
 
 # --- 2. EXECUTE the Initialization (Defining 'model') ---
 model = initialize_agent()
