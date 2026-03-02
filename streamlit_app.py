@@ -51,9 +51,9 @@ def initialize_agent():
     )
 
     try:
-        return genai.GenerativeModel(model_name="gemini-3-flash", system_instruction=system_instruction)
-    except Exception:
         return genai.GenerativeModel(model_name="gemini-1.5-flash", system_instruction=system_instruction)
+    except Exception:
+        return genai.GenerativeModel(model_name="gemini-1.5-pro", system_instruction=system_instruction)
 
 
 # Initialize model and chat session
