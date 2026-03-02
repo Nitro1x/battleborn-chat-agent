@@ -84,7 +84,7 @@ def initialize_agent():
         st.markdown(msg["content"])
 
     if prompt := st.chat_input("How can BattleBorn help you today?"):
-    st.session_state.messages.append({"role": "user", "content": prompt})
+     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="user"):
         st.markdown(prompt)
 
