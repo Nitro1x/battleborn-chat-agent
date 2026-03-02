@@ -70,9 +70,9 @@ if prompt := st.chat_input("How can BattleBorn help you today?"):
     with st.chat_message("assistant", avatar=logo_url):
         with st.spinner("Analyzing Mission Parameters..."):
             try:
-                # MISSION: Generate response using the stable 1.5-Flash asset
+                # MISSION: Use the short-form model ID
                 response = client.models.generate_content(
-                    model="gemini-1.5-flash",
+                    model="gemini-1.5-flash", # FIXED: Removed 'models/' prefix
                     contents=prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=BBI_INSTRUCTION,
