@@ -40,13 +40,18 @@ def submit_service_request(name: str, email: str, phone: str, service_type: str,
 
 # --- 2. INITIALIZATION ---
 def initialize_agent():
-    api_key = st.secrets.get("GOOGLE_API_KEY")
+    # Try multiple common secret names just in case
+    api_key = st.secrets.get("GOOGLE_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+    
     if not api_key:
+        # Debugging tip: This will show up in your Cloud Logs
+        print("BBI LOG: GOOGLE_API_KEY not found in secrets or environment.")
         return None
     try:
-        # The modern 2026 client initialization
+        # Ensure 'genai' is imported at the top of your file
         return genai.Client(api_key=api_key)
-    except Exception:
+    except Exception as e:
+        print(f"BBI LOG: Client Init Error: {e}")
         return None
 
 client = initialize_agent()
