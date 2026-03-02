@@ -45,8 +45,7 @@ def initialize_agent():
         "If a user needs a service quote, use the 'submit_service_request' tool."
     )
 
-    try:
-        # MISSION: Identify available models
+    # MISSION: Identify available models and try them one by one
     models_to_try = [
         "gemini-1.5-flash",
         "gemini-1.5-pro",
@@ -65,10 +64,9 @@ def initialize_agent():
             # If this model fails, continue to the next one in the list
             continue
 
-    # If all models fail, trigger a system alert
+    # If the loop finishes without returning a model, it's a total failure
     st.error("❌ No available models found. Check API key permissions.")
     st.stop()
-    ]
     
     for model_name in models_to_try:
         try:
