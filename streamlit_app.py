@@ -1,16 +1,15 @@
 import os
 import streamlit as st
-import requests  # Make sure to 'pip install requests' if not already there
-from google import genai
-from google.genai import types
+import requests
+
 def send_bbi_lead(name, email, phone, site_type, desc, urgency):
+    # MISSION: Ensure the URL is exactly this (no trailing slash)
     url = "https://api.emailjs.com/api/v1.0/email/send"
     
-    # MISSION: Ensure no extra spaces exist in these strings
     payload = {
-        "service_id": "service_ij65q1c",  # <--- Re-copy from 'Email Services'
-        "template_id": "template_zxu2h7w", # <--- Re-copy from 'Email Templates'
-        "user_id": "RFH52WT8kwrRyAhT6",    # <--- Re-copy from 'Account/Integration'
+        "service_id": "service_ij65q1c",
+        "template_id": "template_zxu2h7w", # Verified Chat Lead Template
+        "user_id": "RFH52WT8kwrRyAhT6",    # Your Public Key
         "template_params": {
             "customer_name": name,
             "customer_email": email,
@@ -27,12 +26,9 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
     
     try:
         response = requests.post(url, json=payload, headers=headers)
-        # This will show the specific error message from EmailJS in your logs
-        if response.status_code != 200:
-            print(f"BBI 404 ERROR: {response.text}") 
+        # 200 = Success, 404 = ID Not Found, 403 = Key/Permission Issue
         return response.status_code
     except Exception as e:
-        print(f"BBI CONNECTION ERROR: {e}")
         return 500
 # Page configuration
 st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="⚡", layout="wide")
