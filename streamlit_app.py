@@ -4,7 +4,7 @@ from google import genai  # THE NEW SDK
 from google.genai import types
 
 # Page configuration
-st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="⚡", layout="wide")
+st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png", layout="narrow")
 
 # --- TOOLS ---
 def submit_service_request(name: str, email: str, phone: str, service_type: str, site_type: str, location: str, issue_description: str, urgency: str) -> str:
