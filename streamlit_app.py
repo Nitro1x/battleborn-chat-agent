@@ -67,18 +67,6 @@ def initialize_agent():
     # If the loop finishes without returning a model, it's a total failure
     st.error("❌ No available models found. Check API key permissions.")
     st.stop()
-    
-    for model_name in models_to_try:
-        try:
-        # MISSION FIX: Ensure all brackets are closed
-        return genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
-            system_instruction=system_instruction,
-            tools=[submit_service_request]
-        ) # <--- Make sure this closing bracket is here!
-    except Exception as e:
-        st.error(f"❌ Model Init Error: {e}")
-        st.stop()
 
 # Initialize session
 model = initialize_agent()
