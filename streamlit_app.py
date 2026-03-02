@@ -2,53 +2,46 @@ import os
 import streamlit as st
 import requests
 import json
-# IMPORT CHECK: Ensure google-genai is in requirements.txt
-from google import genai 
+from google import genai
 from google.genai import types
 
 # Page configuration
 st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="⚡", layout="wide")
 
-# --- 1. TOOL DEFINITION ---
+# --- 1. TOOLS ---
 def submit_service_request(name: str, email: str, phone: str, service_type: str, site_type: str, location: str, issue_description: str, urgency: str) -> str:
-    """Logs a service request for BBI infrastructure projects."""
-    # Your Wix Webhook logic here...
+    """Logs a service request for BBI projects."""
     return f"Mission Logged for {name}."
 
-# --- 2. ENGINE INITIALIZATION ---
+# --- 2. INITIALIZATION ---
 def initialize_agent():
-    api_key = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
+    api_key = st.secrets.get("GOOGLE_API_KEY")
     if not api_key:
         return None
-    
     try:
-        # Initializing the modern GenAI Client
-        client = genai.Client(api_key=api_key)
-        return client
-    except Exception as e:
-        st.error(f"⚠️ Connection Error: {e}")
+        # The modern 2026 client initialization
+        return genai.Client(api_key=api_key)
+    except Exception:
         return None
 
 client = initialize_agent()
 
 # --- 3. SAFETY GUARD ---
 if client is None:
-    st.error("🚨 Critical Failure: AI Engine offline. Verify GOOGLE_API_KEY in Secrets.")
+    st.error("🚨 Critical Failure: Verify GOOGLE_API_KEY in Streamlit Secrets.")
     st.stop()
 
-# System Instruction
 BBI_INSTRUCTION = (
     "You are the BattleBorn Infrastructures (BBI) AI Assistant. "
     "BBI is a VETERAN-OWNED and VETERAN-LED infrastructure firm. "
-    "Tone: Mission-oriented, technical, and professional."
+    "Tone: Mission-oriented and professional."
 )
 
-# --- 4. UI & CHAT ---
+# --- 4. UI ---
 logo_url = "https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png"
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Header
 col1, col2 = st.columns([1, 8])
 with col1:
     st.image(logo_url, width=80)
@@ -56,21 +49,20 @@ with col2:
     st.title("BattleBorn Infrastructures")
     st.caption("Veteran-Owned | Infrastructure Intelligence & Operations")
 
-# Chat Logic
 for msg in st.session_state.messages:
-    avatar = logo_url if msg["role"] == "assistant" else "user"
-    with st.chat_message(msg["role"], avatar=avatar):
+    with st.chat_message(msg["role"], avatar=logo_url if msg["role"] == "assistant" else "user"):
         st.markdown(msg["content"])
 
+# --- 5. THE CHAT LOGIC ---
 if prompt := st.chat_input("How can BattleBorn help you today?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user", avatar="user"):
+    with st.chat_message("user"):
         st.markdown(prompt)
 
     with st.chat_message("assistant", avatar=logo_url):
         with st.spinner("Analyzing Mission Parameters..."):
             try:
-                # MISSION: Use the short-form model ID
+                # PRECISION FIX: The model name MUST be exactly this string
                 response = client.models.generate_content(
                     model="gemini-1.5-flash", 
                     contents=prompt,
@@ -80,14 +72,11 @@ if prompt := st.chat_input("How can BattleBorn help you today?"):
                     )
                 )
                 
-                # Check if the response has text (it might be a tool call)
                 if response.text:
-                    text = response.text
-                    st.markdown(text)
-                    st.session_state.messages.append({"role": "assistant", "content": text})
+                    st.markdown(response.text)
+                    st.session_state.messages.append({"role": "assistant", "content": response.text})
                 else:
-                    st.info("Mission Status: Tool call initiated or empty response.")
+                    st.info("System: Processing mission data (Tool Call).")
 
             except Exception as e:
-                # Alignment fixed: st.error is now inside the except block
                 st.error(f"❌ Mission Interrupted: {e}")
