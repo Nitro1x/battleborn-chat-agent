@@ -53,11 +53,10 @@ def initialize_agent():
     )
 
     # Use Gemini 1.5 Flash for speed and efficiency
-    try:
-        return genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
-            system_instruction=system_instruction
-        )
+        try:
+            for model_info in available_models:
+                if "generateContent" in getattr(model_info, "supported_generation_methods", []):
+                    return genai.GenerativeModel(model_name=getattr(model_info, "name", None), system_instruction=system_instruction)
     except Exception as e:
         st.error(f"❌ Could not initialize Gemini 1.5 Flash: {e}")
         st.stop()
