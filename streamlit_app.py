@@ -93,6 +93,6 @@ if prompt := st.chat_input("How can BattleBorn help you today?"):
                     st.markdown(text)
                     st.session_state.messages.append({"role": "assistant", "content": text})
                 else:
-                    st.warning("AI returned an empty response. Try rephrasing.")
+                    st.warning("⚠️ No response received from the AI. This may happen due to API rate limits or content policy violations. Try asking a different question.")
             except Exception as e:
                 st.error(f"❌ System Error: {e}")
