@@ -64,7 +64,7 @@ if prompt := st.chat_input("How can BattleBorn help you today?"):
             try:
                 # PRECISION FIX: Remove 'models/' prefix for the 2.0 SDK
                 response = client.models.generate_content(
-                    model="gemini-1.5-flash", # FIXED: No 'models/' prefix
+                    model="gemini-1.5-flash",
                     contents=prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=BBI_INSTRUCTION,
