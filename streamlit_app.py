@@ -85,9 +85,13 @@ if "chat_session" not in st.session_state:
     st.session_state.messages = []
 
 # UI Header
-st.title("⚡ BattleBorn Infrastructures")
-st.caption("Veteran-Owned | Infrastructure Intelligence & Operations")
-
+# UI Header
+col1, col2 = st.columns([1, 5])
+with col1:
+    st.image("logo.png", width=100)  # Make sure the filename matches your file in GitHub
+with col2:
+    st.title("BattleBorn Infrastructures")
+    st.caption("Veteran-Owned | Infrastructure Intelligence & Operations")
 # Render existing messages
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
