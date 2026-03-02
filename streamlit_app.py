@@ -4,14 +4,17 @@ from google.genai import types
 import streamlit as st
 import requests
 
+import json # Add this at the top of your file if not there
+
 def send_bbi_lead(name, email, phone, site_type, desc, urgency):
-    # MISSION: Ensure URL is exactly this (No extra slashes)
+    # MISSION: Use the explicit V1 endpoint
     url = "https://api.emailjs.com/api/v1.0/email/send"
     
-    payload = {
-        "service_id": "service_ij65q1c",  # <--- RE-PASTE FROM DASHBOARD
-        "template_id": "template_zxu2h7w", # <--- RE-PASTE FROM DASHBOARD
-        "user_id": "RFH52WT8kwrRyAhT6",    # <--- RE-PASTE FROM DASHBOARD
+    # Ensure these are exactly as they appear in the dashboard (no spaces!)
+    data = {
+        "service_id": "service_ij65q1c",
+        "template_id": "template_zxu2h7w",
+        "user_id": "RFH52WT8kwrRyAhT6",
         "template_params": {
             "customer_name": name,
             "customer_email": email,
@@ -22,13 +25,18 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
         }
     }
     
-    headers = {'Content-Type': 'application/json'}
+    headers = {
+        'Content-Type': 'application/json'
+    }
     
     try:
-        response = requests.post(url, json=payload, headers=headers)
-        # If this isn't 200, it prints the error text to your Streamlit logs
+        # We use json.dumps to force-format the string
+        response = requests.post(url, data=json.dumps(data), headers=headers)
+        
+        # Log the raw text so we can see what EmailJS says
         if response.status_code != 200:
-            print(f"BBI API ERROR {response.status_code}: {response.text}")
+            print(f"BBI FAIL: {response.status_code} - {response.text}")
+            
         return response.status_code
     except Exception as e:
         print(f"BBI CONNECTION ERROR: {e}")
