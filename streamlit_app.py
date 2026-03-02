@@ -72,7 +72,7 @@ if prompt := st.chat_input("How can BattleBorn help you today?"):
             try:
                 # MISSION: Use the short-form model ID
                 response = client.models.generate_content(
-                    model="gemini-1.5-flash", # FIXED: Removed 'models/' prefix
+                    model="gemini-1.5-flash", 
                     contents=prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=BBI_INSTRUCTION,
