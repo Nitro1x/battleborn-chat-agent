@@ -62,9 +62,9 @@ if prompt := st.chat_input("How can BattleBorn help you today?"):
     with st.chat_message("assistant", avatar=logo_url):
         with st.spinner("Analyzing Mission Parameters..."):
             try:
-                # PRECISION FIX: The model name MUST be exactly this string
+                # PRECISION FIX: Remove 'models/' prefix for the 2.0 SDK
                 response = client.models.generate_content(
-                    model="gemini-1.5-flash", 
+                    model="gemini-1.5-flash", # FIXED: No 'models/' prefix
                     contents=prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=BBI_INSTRUCTION,
