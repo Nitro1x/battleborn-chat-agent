@@ -2,9 +2,8 @@ import os
 import streamlit as st
 import requests
 import json
-from google import genai 
+import google
 from google.genai import types
-
 # Page configuration
 st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="⚡", layout="wide")
 
@@ -22,7 +21,7 @@ def initialize_agent():
     
     try:
         # Initializing the modern GenAI Client
-        client = genai.Client(api_key=api_key)
+        client = google.genai.Client(api_key=api_key)
         return client
     except Exception as e:
         st.error(f"⚠️ Connection Error: {e}")
