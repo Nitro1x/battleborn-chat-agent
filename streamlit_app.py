@@ -9,14 +9,14 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
         "service_id": "service_ij65q1c",
         "template_id": "template_zxu2h7w",
         "user_id": "RFH52WT8kwrRyAhT6",
-        "template_params": {
+        "template_params": {{
             "customer_name": name,
             "customer_email": email,
             "customer_phone": phone,
             "site_type": site_type,
             "project_desc": desc,
             "urgency": urgency
-        }
+        }}
     }
     headers = {'Content-Type': 'application/json'}
     response = requests.post(url, json=payload, headers=headers)
