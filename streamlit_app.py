@@ -52,14 +52,29 @@ def initialize_agent():
         "and brings military-grade precision and discipline to every project."
     )
 
-    # Use Gemini 1.5 Flash for speed and efficiency
-        try:
-            for model_info in available_models:
-                if "generateContent" in getattr(model_info, "supported_generation_methods", []):
-                    return genai.GenerativeModel(model_name=getattr(model_info, "name", None), system_instruction=system_instruction)
+    # List available models and pick the first that supports text generation
+    try:
+        available_models = genai.list_models()
+        for model_info in available_models:
+            if "generateContent" in getattr(model_info, "supported_generation_methods", []):
+                return genai.GenerativeModel(model_name=getattr(model_info, "name", None), system_instruction=system_instruction)
     except Exception as e:
-        st.error(f"❌ Could not initialize Gemini 1.5 Flash: {e}")
-        st.stop()
+        st.warning(f"Could not list models: {e}. Falling back to configured defaults.")
+
+    # Fallback to known stable model resource names
+    models_to_try = [
+        "models/gemini-pro-latest",
+        "models/gemini-flash-latest",
+        "models/gemini-2.5-flash",
+    ]
+    for model_name in models_to_try:
+        try:
+            return genai.GenerativeModel(model_name=model_name, system_instruction=system_instruction)
+        except Exception:
+            continue
+
+    st.error("❌ No available models. API key may have limited access. Contact support.")
+    st.stop()
 
 # Initialize model and chat session
 model = initialize_agent()
