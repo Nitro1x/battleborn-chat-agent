@@ -6,11 +6,11 @@ from google.genai import types
 def send_bbi_lead(name, email, phone, site_type, desc, urgency):
     url = "https://api.emailjs.com/api/v1.0/email/send"
     
-    # PAYLOAD: Ensure these are 100% correct from your dashboard
+    # MISSION: Ensure no extra spaces exist in these strings
     payload = {
-        "service_id": "service_ij65q1c",
-        "template_id": "template_zxu2h7w", 
-        "user_id": "RFH52WT8kwrRyAhT6",
+        "service_id": "service_ij65q1c",  # <--- Re-copy from 'Email Services'
+        "template_id": "template_zxu2h7w", # <--- Re-copy from 'Email Templates'
+        "user_id": "RFH52WT8kwrRyAhT6",    # <--- Re-copy from 'Account/Integration'
         "template_params": {
             "customer_name": name,
             "customer_email": email,
@@ -21,20 +21,15 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
         }
     }
     
-    # HEADERS: Using a common User-Agent tells EmailJS this is a valid request
     headers = {
-    'Content-Type': 'application/json',
-    'Origin': 'https://battleborn-infrastructures.streamlit.app' # <--- Change to your actual app URL
-}
+        'Content-Type': 'application/json'
+    }
     
     try:
-        # We use json=payload to ensure Python handles the string conversion
         response = requests.post(url, json=payload, headers=headers)
-        
-        # This will print the actual reason for the 403 in your Streamlit logs
+        # This will show the specific error message from EmailJS in your logs
         if response.status_code != 200:
-            print(f"BBI ERROR: {response.status_code} - {response.text}")
-            
+            print(f"BBI 404 ERROR: {response.text}") 
         return response.status_code
     except Exception as e:
         print(f"BBI CONNECTION ERROR: {e}")
