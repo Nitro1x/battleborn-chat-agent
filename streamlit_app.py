@@ -7,7 +7,7 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
     url = "https://api.emailjs.com/api/v1.0/email/send"
     payload = {
         "service_id": "service_ij65q1c",
-        "template_id": "template_zxu2h7w", # Ensure this ID matches EmailJS exactly
+        "template_id": "template_zxu2h7w", # Verified: Battleborn Contact Template
         "user_id": "RFH52WT8kwrRyAhT6",
         "template_params": {
             "customer_name": name,
