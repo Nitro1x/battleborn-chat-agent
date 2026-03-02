@@ -55,13 +55,15 @@ def initialize_agent():
     
     for model_name in models_to_try:
         try:
-            return genai.GenerativeModel(
-                model_name=model_name, 
-                system_instruction=system_instruction,
-                tools=[submit_service_request]
-            )
-        except Exception:
-            continue
+        # MISSION FIX: Ensure all brackets are closed
+        return genai.GenerativeModel(
+            model_name="gemini-1.5-flash",
+            system_instruction=system_instruction,
+            tools=[submit_service_request]
+        ) # <--- Make sure this closing bracket is here!
+    except Exception as e:
+        st.error(f"❌ Model Init Error: {e}")
+        st.stop()
 
 # Initialize session
 model = initialize_agent()
