@@ -7,7 +7,7 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
     url = "https://api.emailjs.com/api/v1.0/email/send"
     payload = {
         "service_id": "service_ij65q1c",
-        "template_id": "template_zxu2h7w",
+        "template_id": "template_zxu2h7w","Contact Us"
         "user_id": "RFH52WT8kwrRyAhT6",
         "template_params": {
             "customer_name": name,
@@ -104,7 +104,7 @@ if prompt := st.chat_input("Enter project details..."):
     # Check if the PREVIOUS message from the assistant was the lead-capture prompt
     if len(st.session_state.messages) > 1:
         last_ai_msg = st.session_state.messages[-2]["content"]
-        if "Once I have these details, I will submit a service request" in last_ai_msg:
+        if any(x in last_ai_msg for x in ["Once I have these details", "submit a service request", "logged with high urgency"]):
             
             # Combine history so the extractor can find the Name, Email, etc.
             chat_history = " ".join([m["content"] for m in st.session_state.messages])
