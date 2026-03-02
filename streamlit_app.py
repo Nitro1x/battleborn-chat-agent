@@ -46,11 +46,28 @@ def initialize_agent():
     )
 
     try:
-        return genai.GenerativeModel(
-            models_try = [
+        # MISSION: Identify available models
+    models_to_try = [
         "gemini-1.5-flash",
         "gemini-1.5-pro",
         "gemini-pro",
+    ]
+    
+    for m_name in models_to_try:
+        try:
+            # Attempt to initialize the model with BBI tools
+            return genai.GenerativeModel(
+                model_name=m_name, 
+                system_instruction=system_instruction,
+                tools=[submit_service_request]
+            )
+        except Exception:
+            # If this model fails, continue to the next one in the list
+            continue
+
+    # If all models fail, trigger a system alert
+    st.error("❌ No available models found. Check API key permissions.")
+    st.stop()
     ]
     
     for model_name in models_to_try:
