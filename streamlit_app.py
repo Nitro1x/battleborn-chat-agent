@@ -50,6 +50,16 @@ def initialize_agent():
         "Tone: helpful, technical, and professional."
     )
 
+    # List available models and pick the first one that supports generateContent
+    try:
+        available_models = genai.list_models()
+        for model_info in available_models:
+            if "generateContent" in model_info.supported_generation_methods:
+                return genai.GenerativeModel(model_name=model_info.name.split("/")[-1], system_instruction=system_instruction)
+    except Exception as e:
+        st.warning(f"Could not list models: {e}. Falling back to default.")
+    
+    # Fallback to known models
     models_to_try = ["gemini-1.5-pro", "gemini-1.5-flash", "gemini-pro"]
     for model_name in models_to_try:
         try:
