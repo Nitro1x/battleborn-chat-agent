@@ -33,8 +33,7 @@ def submit_service_request(name: str, email: str, phone: str, service_type: str,
 def initialize_agent():
     api_key = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not api_key:
-        st.error("❌ API Key missing. Check Streamlit Secrets.")
-        return None  # Explicitly return None so we can catch it
+        return None
 
     genai.configure(api_key=api_key)
 
@@ -44,35 +43,27 @@ def initialize_agent():
         "Tone: Mission-oriented and professional."
     )
 
-    models_to_try = ["gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
-    
-    for m_name in models_to_try:
-        try:
-            # MISSION: Attempt to build the model
-            return genai.GenerativeModel(
-                model_name=m_name, 
-                system_instruction=system_instruction,
-                tools=[submit_service_request]
-            )
-        except Exception as e:
-            print(f"Skipping {m_name}: {e}") # Log the failure internally
-            continue
-    
-            return None # Return None if all scouts fail
+    try:
+        return genai.GenerativeModel(
+            model_name="gemini-1.5-flash",
+            system_instruction=system_instruction,
+            tools=[submit_service_request]
+        )
+    except Exception:
+        return None
 
-# --- Initialization Logic ---
-    model = initialize_agent()
+# --- 2. EXECUTE the Initialization (Defining 'model') ---
+model = initialize_agent()
 
-# --- Initialization Guard ---
+# --- 3. Safety Guard ---
 if model is None:
-    st.error("🚨 Critical Failure: Could not initialize any AI models. Please check your GOOGLE_API_KEY permissions.")
-    st.stop() # Prevents the 'NoneType' error by stopping the script here
+    st.error("🚨 Critical Failure: 'model' is not defined. Check your GOOGLE_API_KEY in Streamlit Secrets.")
+    st.stop()
 
+# --- 4. Start the Session ---
 if "chat_session" not in st.session_state:
-    # Now this is safe because we checked if model is None above
     st.session_state.chat_session = model.start_chat(enable_automatic_function_calling=True)
     st.session_state.messages = []
-
 # --- UI HEADER ---
 logo_url = "https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png"
 col1, col2 = st.columns([1, 8])
