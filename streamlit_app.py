@@ -2,8 +2,10 @@ import os
 import streamlit as st
 import requests
 import json
-import google
+# IMPORT CHECK: Ensure google-genai is in requirements.txt
+from google import genai 
 from google.genai import types
+
 # Page configuration
 st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="⚡", layout="wide")
 
@@ -21,7 +23,7 @@ def initialize_agent():
     
     try:
         # Initializing the modern GenAI Client
-        client = google.genai.Client(api_key=api_key)
+        client = genai.Client(api_key=api_key)
         return client
     except Exception as e:
         st.error(f"⚠️ Connection Error: {e}")
@@ -68,17 +70,24 @@ if prompt := st.chat_input("How can BattleBorn help you today?"):
     with st.chat_message("assistant", avatar=logo_url):
         with st.spinner("Analyzing Mission Parameters..."):
             try:
-                # Using Gemini 2.0 Flash for maximum speed/accuracy
+                # MISSION: Generate response using the stable 1.5-Flash asset
                 response = client.models.generate_content(
-                    model="gemini-2.0-flash",
+                    model="gemini-1.5-flash",
                     contents=prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=BBI_INSTRUCTION,
-                        tools=[submit_service_request] # Tools are handled here now
+                        tools=[submit_service_request]
                     )
                 )
-                text = response.text
-                st.markdown(text)
-                st.session_state.messages.append({"role": "assistant", "content": text})
+                
+                # Check if the response has text (it might be a tool call)
+                if response.text:
+                    text = response.text
+                    st.markdown(text)
+                    st.session_state.messages.append({"role": "assistant", "content": text})
+                else:
+                    st.info("Mission Status: Tool call initiated or empty response.")
+
             except Exception as e:
+                # Alignment fixed: st.error is now inside the except block
                 st.error(f"❌ Mission Interrupted: {e}")
