@@ -58,7 +58,7 @@ model = initialize_agent()
 
 # --- 3. Safety Guard ---
 if model is None:
-    st.error("🚨 Critical Failure: 'model' is not defined. Check your GOOGLE_API_KEY in Streamlit Secrets.")
+    st.warning("📋 Action Required: Check the error message above to troubleshoot your API connection.")
     st.stop()
 
 # --- 4. Start the Session ---
