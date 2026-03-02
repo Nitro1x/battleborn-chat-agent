@@ -50,10 +50,15 @@ def initialize_agent():
         "Tone: helpful, technical, and professional."
     )
 
-    try:
-        return genai.GenerativeModel(model_name="gemini-1.5-flash", system_instruction=system_instruction)
-    except Exception:
-        return genai.GenerativeModel(model_name="gemini-1.5-pro", system_instruction=system_instruction)
+    models_to_try = ["gemini-1.5-pro", "gemini-1.5-flash", "gemini-pro"]
+    for model_name in models_to_try:
+        try:
+            return genai.GenerativeModel(model_name=model_name, system_instruction=system_instruction)
+        except Exception:
+            continue
+    
+    st.error(f"❌ No available models. API key may have limited access. Contact support.")
+    st.stop()
 
 
 # Initialize model and chat session
