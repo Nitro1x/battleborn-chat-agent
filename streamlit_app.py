@@ -91,14 +91,25 @@ with col1:
 st.title("BattleBorn Infrastructures")
 st.caption("Veteran-Owned | Infrastructure Intelligence & Operations")
 # Render existing messages
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
+for msg in st.session_state.messages:for msg in st.session_state.messages:
+    # This sets the logo for the assistant and a user icon for you
+    current_avatar = "https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png" if msg["role"] == "assistant" else "👤"
+    with st.chat_message(msg["role"], avatar=current_avatar):
         st.markdown(msg["content"])
+    
 
 if prompt := st.chat_input("How can BattleBorn help you today?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
-    with st.chat_message("user"):
+    wwith st.chat_message("user", avatar="👤"):
         st.markdown(prompt)
+
+    with st.chat_message("assistant", avatar="with st.chat_message("user", avatar="👤"):
+        st.markdown(prompt)
+
+    with st.chat_message("assistant", avatar="https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png"): # Sets logo for the new response
+        with st.spinner("Analyzing Mission Parameters..."):
+            # ... (the rest of your AI logic)"): # Sets logo for the new response
+        
 
     with st.chat_message("assistant"):
         with st.spinner("Analyzing Mission Parameters..."):
