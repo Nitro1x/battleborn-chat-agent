@@ -2,7 +2,6 @@ import os
 import streamlit as st
 import requests
 import json
-# IMPORT CHECK: Ensure google-genai is in requirements.txt
 from google import genai 
 from google.genai import types
 
