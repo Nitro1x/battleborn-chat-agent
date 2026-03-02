@@ -5,13 +5,13 @@ import streamlit as st
 import requests
 
 def send_bbi_lead(name, email, phone, site_type, desc, urgency):
-    # MISSION: Ensure the URL is exactly this (no trailing slash)
+    # MISSION: Ensure URL is exactly this (No extra slashes)
     url = "https://api.emailjs.com/api/v1.0/email/send"
     
     payload = {
-        "service_id": "service_ij65q1c",
-        "template_id": "template_zxu2h7w", # Verified Chat Lead Template
-        "user_id": "RFH52WT8kwrRyAhT6",    # Your Public Key
+        "service_id": "service_ij65q1c",  # <--- RE-PASTE FROM DASHBOARD
+        "template_id": "template_zxu2h7w", # <--- RE-PASTE FROM DASHBOARD
+        "user_id": "RFH52WT8kwrRyAhT6",    # <--- RE-PASTE FROM DASHBOARD
         "template_params": {
             "customer_name": name,
             "customer_email": email,
@@ -22,15 +22,16 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
         }
     }
     
-    headers = {
-        'Content-Type': 'application/json'
-    }
+    headers = {'Content-Type': 'application/json'}
     
     try:
         response = requests.post(url, json=payload, headers=headers)
-        # 200 = Success, 404 = ID Not Found, 403 = Key/Permission Issue
+        # If this isn't 200, it prints the error text to your Streamlit logs
+        if response.status_code != 200:
+            print(f"BBI API ERROR {response.status_code}: {response.text}")
         return response.status_code
     except Exception as e:
+        print(f"BBI CONNECTION ERROR: {e}")
         return 500
 # Page configuration
 st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="⚡", layout="wide")
