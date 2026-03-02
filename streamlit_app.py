@@ -7,7 +7,7 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
     url = "https://api.emailjs.com/api/v1.0/email/send"
     payload = {
         "service_id": "service_ij65q1c",
-        "template_id": "YOUR_NEW_LEAD_TEMPLATE_ID", # Create a simple lead template in EmailJS
+        "template_id": "template_zxu2h7w",
         "user_id": "RFH52WT8kwrRyAhT6",
         "template_params": {
             "customer_name": name,
