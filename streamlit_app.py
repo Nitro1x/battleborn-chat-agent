@@ -8,7 +8,7 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
     payload = {
         "service_id": "service_ij65q1c",
         "template_id": "template_zxu2h7w",
-        "user_id": "RFH52WT8kwrRyAhT6",
+        "user_id": "JnxAqdOLjHLxQMel6",
         "template_params": {
             "customer_name": name,
             "customer_email": email,
