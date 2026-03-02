@@ -62,9 +62,9 @@ if prompt := st.chat_input("How can BattleBorn help you today?"):
     with st.chat_message("assistant", avatar=logo_url):
         with st.spinner("Analyzing Mission Parameters..."):
             try:
-                # PRECISION FIX: Remove 'models/' prefix for the 2.0 SDK
+                ## MISSION: Deploying the 2026 Standard Asset (Gemini 2.5 Flash)
                 response = client.models.generate_content(
-                    model="gemini-1.5-flash",
+                    model="gemini-2.5-flash", # <--- UPGRADED FROM 1.5
                     contents=prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=BBI_INSTRUCTION,
