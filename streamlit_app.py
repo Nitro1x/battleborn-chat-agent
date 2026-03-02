@@ -88,7 +88,7 @@ if "chat_session" not in st.session_state:
 col1, col2 = st.columns([1, 5])
 with col1:
     st.image("https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png", width=100)
-st.title("⚡ BattleBorn Infrastructures")
+st.title("BattleBorn Infrastructures")
 st.caption("Veteran-Owned | Infrastructure Intelligence & Operations")
 # Render existing messages
 for msg in st.session_state.messages:
