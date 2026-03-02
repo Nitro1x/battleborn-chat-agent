@@ -1,9 +1,26 @@
 import os
 import streamlit as st
-import requests
-import json
+import requests  # Make sure to 'pip install requests' if not already there
 from google import genai
 from google.genai import types
+def send_bbi_lead(name, email, phone, site_type, desc, urgency):
+    url = "https://api.emailjs.com/api/v1.0/email/send"
+    payload = {
+        "service_id": "service_ij65q1c",
+        "template_id": "YOUR_NEW_LEAD_TEMPLATE_ID", # Create a simple lead template in EmailJS
+        "user_id": "RFH52WT8kwrRyAhT6",
+        "template_params": {
+            "customer_name": name,
+            "customer_email": email,
+            "customer_phone": phone,
+            "site_type": site_type,
+            "project_desc": desc,
+            "urgency": urgency
+        }
+    }
+    headers = {'Content-Type': 'application/json'}
+    response = requests.post(url, json=payload, headers=headers)
+    return response.status_code
 
 # Page configuration
 st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="⚡", layout="wide")
@@ -69,17 +86,59 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 # --- 5. THE CHAT LOGIC ---
-if prompt := st.chat_input("How can BattleBorn help you today?"):
+
+# Move the helper function OUTSIDE of the if block so it's always ready
+def extract_info(keyword, text):
+    if keyword in text:
+        # Splits by the keyword and takes the first line after it
+        return text.split(keyword)[1].split('\n')[0].strip(': ')
+    return "Not Provided"
+
+if prompt := st.chat_input("Enter project details..."):
+    # 1. Display and Save User Message
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    # 2. THE BRIDGE CHECK: 
+    # Check if the PREVIOUS message from the assistant was the lead-capture prompt
+    if len(st.session_state.messages) > 1:
+        last_ai_msg = st.session_state.messages[-2]["content"]
+        if "Once I have these details, I will submit a service request" in last_ai_msg:
+            
+            # Combine history so the extractor can find the Name, Email, etc.
+            chat_history = " ".join([m["content"] for m in st.session_state.messages])
+            
+            user_name_variable = extract_info("Name", chat_history)
+            user_email_variable = extract_info("Email", chat_history)
+            user_phone_variable = extract_info("Phone", chat_history)
+            user_site_variable = extract_info("Site Type", chat_history)
+            user_desc_variable = extract_info("Description", chat_history)
+            user_urgency_variable = extract_info("Urgency", chat_history)
+
+            try:
+                # Trigger EmailJS
+                status = send_bbi_lead(
+                    name=user_name_variable, 
+                    email=user_email_variable,
+                    phone=user_phone_variable,
+                    site_type=user_site_variable,
+                    desc=user_desc_variable,
+                    urgency=user_urgency_variable
+                )
+                
+                if status == 200:
+                    st.success("✅ Consultation Request Transmitted to BBI Engineering.")
+                    st.info("💡 **Next Step:** To get an instant itemized PDF quote, visit our [Project Configurator](https://yourlink.com).")
+            except Exception as e:
+                st.error("Lead logged locally, but email transmission delayed.")
+
+    # 3. GENERATE AI RESPONSE
     with st.chat_message("assistant", avatar=logo_url):
         with st.spinner("Analyzing Mission Parameters..."):
             try:
-                ## MISSION: Deploying the 2026 Standard Asset (Gemini 2.5 Flash)
                 response = client.models.generate_content(
-                    model="gemini-2.5-flash", # <--- UPGRADED FROM 1.5
+                    model="gemini-2.5-flash",
                     contents=prompt,
                     config=types.GenerateContentConfig(
                         system_instruction=BBI_INSTRUCTION,
@@ -91,8 +150,6 @@ if prompt := st.chat_input("How can BattleBorn help you today?"):
                     st.markdown(response.text)
                     st.session_state.messages.append({"role": "assistant", "content": response.text})
                 else:
-                    # If there's no text, the AI is likely calling a function.
-                    # We can provide a status update to the user.
                     st.info("BBI Intel: Processing your request...")
 
             except Exception as e:
