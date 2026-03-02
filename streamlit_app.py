@@ -23,9 +23,9 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
     
     # HEADERS: Using a common User-Agent tells EmailJS this is a valid request
     headers = {
-        'Content-Type': 'application/json',
-        'User-Agent': 'Mozilla/5.0'
-    }
+    'Content-Type': 'application/json',
+    'Origin': 'https://battleborn-infrastructures.streamlit.app' # <--- Change to your actual app URL
+}
     
     try:
         # We use json=payload to ensure Python handles the string conversion
