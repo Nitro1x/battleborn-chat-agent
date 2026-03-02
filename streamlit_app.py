@@ -79,6 +79,25 @@ with col1:
     st.image(logo_url, width=80)
 with col2:
     st.title("BattleBorn Infrastructures")
+    # --- DEBUG SIDEBAR: MISSION VERIFICATION ---
+with st.sidebar:
+    st.header("BBI Operations Command")
+    if st.button("🚀 Fire Test Mission"):
+        # Simulated Data
+        test_status = send_bbi_lead(
+            name="TEST OFFICER",
+            email="andrew@example.com", 
+            phone="210-555-0199",
+            site_type="Testing Facility",
+            desc="System verification for BBI Lead Bridge.",
+            urgency="CRITICAL (TEST)"
+        )
+        
+        if test_status == 200:
+            st.sidebar.success("✅ Test Mission Transmitted Successfully!")
+        else:
+            st.sidebar.error(f"❌ Transmission Failed. Error Code: {test_status}")
+            st.sidebar.info("Check EmailJS Service ID and Template ID.")
     st.caption("Veteran-Owned | Infrastructure Intelligence & Operations")
 
 for msg in st.session_state.messages:
