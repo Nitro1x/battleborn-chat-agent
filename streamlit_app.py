@@ -45,14 +45,13 @@ def initialize_agent():
 
     try:
      model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash" 
+        model_name="gemini-1.5-flash", # FIXED: Added the missing comma here
         system_instruction=system_instruction,
         tools=[submit_service_request]
     )
     except Exception as e:
      st.error(f"❌ Initialization Failed: {e}")
-    ) except Exception:
-    return None
+    model = None  # Ensures 'model' exists even if it's empty
 
 # --- 2. EXECUTE the Initialization (Defining 'model') ---
 model = initialize_agent()
