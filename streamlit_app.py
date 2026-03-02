@@ -1,6 +1,5 @@
 import os
 import json
-from xml.parsers.expat import model
 import requests
 import streamlit as st
 import google.generativeai as genai
@@ -64,6 +63,7 @@ def initialize_agent():
 # --- Initialization Logic ---
     model = initialize_agent()
 
+# --- Initialization Guard ---
 if model is None:
     st.error("🚨 Critical Failure: Could not initialize any AI models. Please check your GOOGLE_API_KEY permissions.")
     st.stop() # Prevents the 'NoneType' error by stopping the script here
