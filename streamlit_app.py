@@ -33,8 +33,16 @@ if client is None:
 
 BBI_INSTRUCTION = (
     "You are the BattleBorn Infrastructures (BBI) AI Assistant. "
-    "BBI is a VETERAN-OWNED and VETERAN-LED infrastructure firm. "
-    "Tone: Mission-oriented and professional."
+    "BBI is a VETERAN-OWNED and VETERAN-LED infrastructure firm specializing in "
+    "network design, low-voltage cabling, and IT infrastructure. "
+    
+    "MISSION PARAMETERS: "
+    "1. Be professional, technical, and helpful. "
+    "2. Answer general questions about IT infrastructure and BBI's services. "
+    "3. If a user describes a specific problem or project, use the 'submit_service_request' tool "
+    "to gather their details and log the mission. "
+    "4. Do NOT refuse to answer general questions. If you don't know an answer, "
+    "offer to have a human BBI specialist follow up."
 )
 
 # --- 4. UI ---
@@ -76,7 +84,9 @@ if prompt := st.chat_input("How can BattleBorn help you today?"):
                     st.markdown(response.text)
                     st.session_state.messages.append({"role": "assistant", "content": response.text})
                 else:
-                    st.info("System: Processing mission data (Tool Call).")
+                    # If there's no text, the AI is likely calling a function.
+                    # We can provide a status update to the user.
+                    st.info("BBI Intel: Processing your request...")
 
             except Exception as e:
                 st.error(f"❌ Mission Interrupted: {e}")
