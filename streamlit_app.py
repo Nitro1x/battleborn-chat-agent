@@ -31,56 +31,59 @@ def submit_service_request(name: str, email: str, phone: str, service_type: str,
         return f"Error communicating with the server: {e}"
 
 def initialize_agent():
+    # 1. Pull Key
     api_key = st.secrets.get("GOOGLE_API_KEY") or os.getenv("GOOGLE_API_KEY")
     if not api_key:
+        st.error("🔑 API Key is missing from Secrets.")
         return None
 
-    genai.configure(api_key=api_key)
-
-    system_instruction = (
-        "You are the BattleBorn Infrastructures (BBI) AI Assistant. "
-        "BBI is a VETERAN-OWNED and VETERAN-LED infrastructure firm. "
-        "Tone: Mission-oriented and professional."
-    )
-
     try:
-     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash", # FIXED: Added the missing comma here
-        system_instruction=system_instruction,
-        tools=[submit_service_request]
-    )
+        # 2. Configure
+        genai.configure(api_key=api_key)
+
+        system_instruction = (
+            "You are the BattleBorn Infrastructures (BBI) AI Assistant. "
+            "BBI is a VETERAN-OWNED and VETERAN-LED infrastructure firm. "
+            "Tone: Mission-oriented and professional."
+        )
+
+        # 3. Create Model
+        # Using 1.5-flash as the primary mission asset
+        model = genai.GenerativeModel(
+            system_instruction=system_instruction,
+            tools=[submit_service_request]
+        )
     except Exception as e:
-     st.error(f"❌ Initialization Failed: {e}")
-    model = None  # Ensures 'model' exists even if it's empty
+        # MISSION LOGGING: Show the exact error on the UI
+        st.error(f"⚠️ Connection Error: {e}")
+        return None
 
-# --- 2. EXECUTE the Initialization (Defining 'model') ---
-model = initialize_agent()
+# --- EXECUTION ---
+    model = initialize_agent()
 
-# --- 3. Safety Guard ---
-if model is None:
-    st.warning("📋 Action Required: Check the error message above to troubleshoot your API connection.")
+    if model is None:
+     st.warning("📋 Action Required: Check the error message above to troubleshoot your API connection.")
     st.stop()
-
 # --- 4. Start the Session ---
-if "chat_session" not in st.session_state:
-    st.session_state.chat_session = model.start_chat(enable_automatic_function_calling=True)
+    if "chat_session" not in st.session_state:
+     st.session_state.chat_session = model.start_chat(enable_automatic_function_calling=True)
     st.session_state.messages = []
 # --- UI HEADER ---
-logo_url = "https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png"
-col1, col2 = st.columns([1, 8])
-with col1:
-    st.image(logo_url, width=80)
-with col2:
-    st.title("BattleBorn Infrastructures")
+    logo_url = "https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png"
+    col1, col2 = st.columns([1, 8])
+    with col1:
+     st.image(logo_url, width=80)
+    with col2:
+     st.title("BattleBorn Infrastructures")
     st.caption("Veteran-Owned | Infrastructure Intelligence & Operations")
 
 # --- CHAT INTERFACE ---
-for msg in st.session_state.messages:
-    current_avatar = logo_url if msg["role"] == "assistant" else "user"
+    for msg in st.session_state.messages:
+      current_avatar = logo_url if msg["role"] == "assistant" else "user"
     with st.chat_message(msg["role"], avatar=current_avatar):
         st.markdown(msg["content"])
 
-if prompt := st.chat_input("How can BattleBorn help you today?"):
+    if prompt := st.chat_input("How can BattleBorn help you today?"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user", avatar="user"):
         st.markdown(prompt)
