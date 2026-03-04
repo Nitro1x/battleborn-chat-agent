@@ -42,7 +42,7 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
         print(f"BBI CONNECTION ERROR: {e}")
         return 500
 # Page configuration
-st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="⚡", layout="wide")
+st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png", layout="wide")
 
 # --- 1. TOOLS ---
 def submit_service_request(name: str, email: str, phone: str, service_type: str, site_type: str, location: str, issue_description: str, urgency: str) -> str:
@@ -110,8 +110,8 @@ with st.sidebar:
         # Simulated Data
         test_status = send_bbi_lead(
             name="TEST OFFICER",
-            email="andrew@example.com", 
-            phone="210-555-0199",
+            email="andrew.hesler@battleborninfrastructures.com", 
+            phone="210-6390309",
             site_type="Testing Facility",
             desc="System verification for BBI Lead Bridge.",
             urgency="CRITICAL (TEST)"
