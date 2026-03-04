@@ -12,8 +12,8 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
     
     # Ensure these are exactly as they appear in the dashboard (no spaces!)
     data = {
-        "service_id": "service_ij65q1c",
-        "template_id": "template_zxu2h7w",
+        "service_id": "service_i3y37up",
+        "template_id": "template_8nbvcuk",
         "user_id": "RFH52WT8kwrRyAhT6",
         "template_params": {
             "customer_name": name,
