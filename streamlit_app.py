@@ -14,7 +14,7 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
     data = {
         "service_id": "service_i3y37up",
         "template_id": "template_8nbvcuk",
-        "user_id": "RFH52WT8kwrRyAhT6",
+        "user_id": "kQB8iU16sN2nEoBsI",
         "template_params": {
             "customer_name": name,
             "customer_email": email,
@@ -111,7 +111,7 @@ with st.sidebar:
         test_status = send_bbi_lead(
             name="TEST OFFICER",
             email="andrew.hesler@battleborninfrastructures.com", 
-            phone="210-6390309",
+            phone="210-639-0309",
             site_type="Testing Facility",
             desc="System verification for BBI Lead Bridge.",
             urgency="CRITICAL (TEST)"
