@@ -42,7 +42,7 @@ def send_bbi_lead(name, email, phone, site_type, desc, urgency):
         print(f"BBI CONNECTION ERROR: {e}")
         return 500
 # Page configuration
-st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png", layout="wide")
+st.set_page_config(page_title="BattleBorn Infrastructures", page_icon="https://static.wixstatic.com/media/81481d_0262d29d8a5747f88d360f8805641dee~mv2.png", layout="wide")
 
 # --- 1. TOOLS ---
 def submit_service_request(name: str, email: str, phone: str, service_type: str, site_type: str, location: str, issue_description: str, urgency: str) -> str:
@@ -94,7 +94,7 @@ BBI_INSTRUCTION = (
 )
 
 # --- 4. UI ---
-logo_url = "https://static.wixstatic.com/media/81481d_94bfdbe4f7e14881ae95ce01c458fe7d~mv2.png"
+logo_url = "https://static.wixstatic.com/media/81481d_0262d29d8a5747f88d360f8805641dee~mv2.png"
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
